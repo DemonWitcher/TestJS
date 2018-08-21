@@ -24,19 +24,8 @@ public class MainActivity extends AppCompatActivity {
                 L.i("shouldOverrideUrlLoading");
                 return super.shouldOverrideUrlLoading(view,request);
             }
-//
-//            @Override
-//            public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
-//                L.i("onRenderProcessGone");
-//                return false;
-//            }
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-//                L.i("onPageFinished  url:"+url);
-//            }
         });
+        webView.addJavascriptInterface(this, "testJavaAndJs");
 
         //web的网页
 //        webView.loadUrl("http://www.gcssloop.com/customview/CustomViewIndex/");
@@ -44,6 +33,22 @@ public class MainActivity extends AppCompatActivity {
         //本地的网页
         webView.loadUrl("file:///android_asset/test.html");
         //本地的存放在:assets文件夹中
+    }
+    @android.webkit.JavascriptInterface
+    public void jsCallJava(String content){
+        L.i("js调用了java content:"+content);
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                javaCallJs();
+            }
+        });
+    }
+
+    public void javaCallJs(){
+        String content = "cccbbbaaa";
+        String js =  "javascript:javaCallJs('"+content+"')";
+        webView.loadUrl(js);
     }
 }
